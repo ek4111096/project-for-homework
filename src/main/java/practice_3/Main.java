@@ -9,8 +9,8 @@ public class Main {
         //company1.employeeID = 5;
 
         //MathConstants
-        MathConstants.calculateCircleArea(5);
-        MathConstants.calculateCircumference(9);
+        System.out.println("CircleArea is " + MathConstants.calculateCircleArea(5)); //outprint CircleArea
+        System.out.println("Circumference is " + MathConstants.calculateCircumference(9)); //outprint Circumference
 
         Library lib1 = new Library();
         lib1.getBookTitle();

@@ -14,7 +14,7 @@ public class University {
         universityName = newName;
     }
 
-    public String getUniversityName(){
+    public String getStudentName(){     //changed the name of getter
         return this.studentName;
     }
 
