@@ -4,16 +4,16 @@ import java.util.Scanner;
 
 public class IfElseSolvers {
     public static void main(String[] args) {
-        // signOfNumber();
-        // maxNumber();
-        // grade();
-        // checkParity();
-        // discount();
-        testResult();
+        Scanner scanner = new Scanner(System.in);
+        // signOfNumber(scanner);
+        // maxNumber(scanner);
+        // grade(scanner);
+        // checkParity(scanner);
+        // discount(scanner);
+        testResult(scanner);
 
     }
-    public static void signOfNumber(){
-        Scanner scanner = new Scanner(System.in);
+    public static void signOfNumber(Scanner scanner){
         int number = scanner.nextInt();
         if (number > 0) {
             System.out.println("Number is positive");
@@ -24,8 +24,7 @@ public class IfElseSolvers {
         }
     }
 
-    public static int maxNumber(){
-        Scanner scanner = new Scanner(System.in);
+    public static int maxNumber(Scanner scanner){
         int number1 = scanner.nextInt();
         int number2 = scanner.nextInt();
         int max = Math.max(number1, number2);
@@ -34,8 +33,7 @@ public class IfElseSolvers {
 
     }
 
-    public static String grade() {
-        Scanner scanner = new Scanner(System.in);
+    public static String grade(Scanner scanner) {
         int gradeNumber = scanner.nextInt();
         String grade = "";
         if (gradeNumber == 5) {
@@ -47,14 +45,13 @@ public class IfElseSolvers {
         } else if (gradeNumber == 2 || gradeNumber == 1) {
             grade = "Unsatisfied";
         } else {
-            System.out.println("You enteres wrong grade");
+            System.out.println("Entered wrong grade");
         }
         System.out.println(grade);
         return grade;
     }
 
-    public static String checkParity() {
-        Scanner scanner = new Scanner(System.in);
+    public static String checkParity(Scanner scanner) {
         int number = scanner.nextInt();
         String ifParity;
         if (number % 2 == 0) {
@@ -66,8 +63,7 @@ public class IfElseSolvers {
         return ifParity;
     }
 
-    public static String discount() {
-        Scanner scanner = new Scanner(System.in);
+    public static String discount(Scanner scanner) {
         int age = scanner.nextInt();
         String discount;
         if (age < 18) {
@@ -81,8 +77,7 @@ public class IfElseSolvers {
         return discount;
     }
 
-    public static String testResult(){
-        Scanner scanner = new Scanner(System.in);
+    public static String testResult(Scanner scanner){
         int grade = scanner.nextInt();
         String result = "";
         if (grade >= 90 && grade <= 100) {

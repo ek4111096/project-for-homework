@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class DoWhileSolvers {
     public static void main(String[] args) {
-        // requestPositive();
-        // checkPassword();
-        // outprintNumbers();
-        // finishProgram();
-        countNumbers();
+        Scanner scanner = new Scanner(System.in); //added 1 scanner for the whole class
+        // requestPositive(scanner);
+        // checkPassword(scanner);
+        // outprintNumbers(scanner);
+        // finishProgram(scanner);
+        countNumbers(scanner);
     }
-    public static void requestPositive(){
-        Scanner scanner = new Scanner(System.in);
+    public static void requestPositive(Scanner scanner){
         int number = 0;
         do {
             System.out.println("Enter a number");
@@ -19,8 +19,7 @@ public class DoWhileSolvers {
         } while (number <= 0);
     }
 
-    public static void checkPassword(){
-        Scanner scanner = new Scanner(System.in);
+    public static void checkPassword(Scanner scanner){
         String pass = "admin";
         String input = "";
         do {
@@ -38,19 +37,17 @@ public class DoWhileSolvers {
         } while (count <=10);
     }
 
-    public static void finishProgram(){
-        Scanner scanner = new Scanner(System.in);
+    public static void finishProgram(Scanner scanner){
         String comand = "exit";
         String input = "";
         do {
-            System.out.println("Enter comand: ");
+            System.out.println("Enter command: ");
             input = scanner.nextLine();
         } while (!input.equals(comand));
         System.out.println("Finish");
     }
 
-    public static void countNumbers(){
-        Scanner scanner = new Scanner(System.in);
+    public static void countNumbers(Scanner scanner){
         int count = 0;
         int n = scanner.nextInt();
         if (n == 0) {
@@ -60,7 +57,7 @@ public class DoWhileSolvers {
                 n = n / 10;
                 count++;
             } while (n > 0);
+            System.out.println("Count of numbers: " + count); //moved the printout to the body of else branch
         }
-        System.out.println("Count of numbers: " + count);
     }
 }

@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 public class WhileSolvers {
     public static void main(String[] args) {
-        // countFactorial();
-        // outprintNumbers();
-        backwardCont();
-    }
-    public static void countFactorial(){
         Scanner scanner = new Scanner(System.in);
+        // countFactorial(scanner);
+        // outprintNumbers(scanner);
+        backwardCont(scanner);
+    }
+    public static void countFactorial(Scanner scanner){
         int n = scanner.nextInt();
         int result = 1;
         int i = 1;
@@ -20,8 +20,7 @@ public class WhileSolvers {
         System.out.println(result);
     }
 
-    public static void outprintNumbers(){
-        Scanner scanner = new Scanner(System.in);
+    public static void outprintNumbers(Scanner scanner){
         int n  = scanner.nextInt();
         int i = 1;
         while (i <= n) {
@@ -32,8 +31,7 @@ public class WhileSolvers {
         }
     }
 
-    public static void backwardCont(){
-        Scanner scanner = new Scanner(System.in);
+    public static void backwardCont(Scanner scanner){
         int n = scanner.nextInt();
 
         if (n > 0) {

@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class BreakContinueSolvers {
     public static void main(String[] args) {
-        // sumNumbers();
-        // printNumbers();
-        // printPositive();
-        comandStop();
+        Scanner scanner = new Scanner(System.in); //added 1 scanner for the whole class
+        sumNumbers(scanner);
+        printNumbers();
+        printPositive(scanner);
+        commandStop(scanner);
     }
-    public static void sumNumbers(){
-        Scanner scanner = new Scanner(System.in);
+    public static void sumNumbers(Scanner scanner){
         int sum = 0;
         while (true){
             System.out.println("Enter a number: ");
@@ -34,8 +34,7 @@ public class BreakContinueSolvers {
         }
     }
 
-    public static void printPositive(){
-        Scanner scanner = new Scanner(System.in);
+    public static void printPositive(Scanner scanner){
         while (true) {
             int input = scanner.nextInt();
             if (input == 0) {
@@ -48,15 +47,14 @@ public class BreakContinueSolvers {
         }
     }
 
-    public static void comandStop(){
-        Scanner scanner = new Scanner(System.in);
+    public static void commandStop(Scanner scanner){
         while (true){
-            System.out.println("Enter comand: ");
+            System.out.println("Enter command: ");
             String input = scanner.nextLine();
             if (input.equals("stop")) {
                 break;
             } else {
-                System.out.println("Comand " + input);
+                System.out.println("Command " + input);
             }
         }
     }

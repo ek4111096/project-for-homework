@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class SwitchSolvers {
     public static void main(String[] args) {
-        // dayOfWeek();
-        // ticketPrice();
-        // numbersToLetters();
-        // textOperations();
-        simleCalculator();
-    }
-    public static String dayOfWeek(){
         Scanner scanner = new Scanner(System.in);
+        // dayOfWeek(scanner);
+        // ticketPrice(scanner);
+        // numbersToLetters(scanner);
+        // textOperations(scanner);
+        simpleCalculator(scanner);
+    }
+    public static String dayOfWeek(Scanner scanner){
         int day = scanner.nextInt();
         String dayOfWeek = "";
 
@@ -43,6 +43,7 @@ public class SwitchSolvers {
             case 7:
                 dayOfWeek = "Sunday";
                 System.out.println(day + " - " + dayOfWeek);
+                break; //added break;
             default:
                 dayOfWeek = "Unknown day";
                 System.out.println(day + " - " + dayOfWeek);
@@ -51,8 +52,7 @@ public class SwitchSolvers {
 
     }
 
-    public static String ticketPrice(){
-        Scanner scanner = new Scanner(System.in);
+    public static String ticketPrice(Scanner scanner){
         int day = scanner.nextInt();
         String price = "";
 
@@ -76,8 +76,7 @@ public class SwitchSolvers {
         return price;
     }
 
-    static public String numbersToLetters(){
-        Scanner scanner = new Scanner(System.in);
+    static public String numbersToLetters(Scanner scanner){
         int number = scanner.nextInt();
         String letterGrade = "";
 
@@ -102,8 +101,7 @@ public class SwitchSolvers {
         return letterGrade;
     }
 
-    public static String textOperations() {
-        Scanner scanner = new Scanner(System.in);
+    public static String textOperations(Scanner scanner) {
         String command = scanner.nextLine();
         String result = "";
 
@@ -113,7 +111,7 @@ public class SwitchSolvers {
                 System.out.println(result);
                 break;
             case "stop":
-                result = "System stoped";
+                result = "System stopped";
                 System.out.println(result);
                 break;
             case "restart":
@@ -125,17 +123,16 @@ public class SwitchSolvers {
                 System.out.println(result);
                 break;
             default:
-                System.out.println("Enter correct command");
+                System.out.println("Please enter a valid command");
         }
         return result;
     }
 
-    public static int simleCalculator(){
-        Scanner scanner = new Scanner(System.in);
-        int num1 = scanner.nextInt();
-        int num2 = scanner.nextInt();
+    public static double simpleCalculator(Scanner scanner){  //corrected the method name & changed int -> double
+        double num1 = scanner.nextDouble(); //changed int -> double
+        double num2 = scanner.nextDouble(); //changed int -> double
         String operator = scanner.next();
-        int result = 0;
+        double result = 0; //changed int -> double
 
         switch (operator) {
             case "+":
@@ -152,10 +149,11 @@ public class SwitchSolvers {
                 break;
             case "/":
                 if (num2 == 0) {
-                    System.out.println("Error zero dividion");
+                    System.out.println("Error zero division"); //dividion -> division
+                    break; //added break;
                 } else {
                     result = num1 / num2;
-                    System.out.println("Result is dividion = " + result);
+                    System.out.println("Result is division = " + result); //dividion -> division
                     break;
                 }
             default:
