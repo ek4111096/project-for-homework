@@ -37,10 +37,10 @@ public class Main {
         set2.add(9);
         set2.add(10);
         System.out.println(set2);
-        if (set2.higher(8) != 0) {
+        if (set2.higher(8) != null) {                             //0->null
             System.out.println(set2.higher(8));
         }
-        if (set2.lower(8) != 0) {
+        if (set2.lower(8) != null) {                               //0->null
             System.out.println(set2.lower(8));
         }
 

@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class Main {
     public static void addUnique(LinkedHashSet<String> set, String element) {
-        if (!set.contains(element)) {
-            set.add(element);
-        }
+
+            set.add(element); //redundant check removed
+
     }
     public static void main(String[] args) {
         //1

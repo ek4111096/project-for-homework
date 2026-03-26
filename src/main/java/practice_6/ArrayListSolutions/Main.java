@@ -11,7 +11,7 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             nums.add(i);
         }
-        nums.addLast(25);
+        nums.add(25);
         System.out.println(nums);
 
 
@@ -34,21 +34,17 @@ public class Main {
         list.add("Aaaaaa");
         list.add("Aaaa");
 
-        AtomicInteger max = new AtomicInteger();
-        list.forEach(
-                word -> {
-                    if (word.length() > max.get()) {
-                        max.set(word.length());
-                    }
-                }
-        );
-        list.forEach(
-                word -> {
-                    if (word.length() == max.get()) {
-                        System.out.println(word);
-                    }
-                }
-        );
+        int max = 0;
+        for (String s : list) {
+            if (s.length() > max) {
+                max = s.length();
+            }
+        }
+        for (String s : list) {
+            if (s.length() == max) {
+                System.out.println(s);
+            }
+        }
 
         //4 task
         ArrayList<Integer> list1 = new ArrayList<>();

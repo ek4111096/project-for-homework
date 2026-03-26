@@ -22,6 +22,7 @@ public class Main {
         }
         System.out.println(queue);
         while (!queue.isEmpty()) {
+            System.out.println(queue.getFirst()); //added output of element
             queue.poll();
             System.out.println(queue);
         }

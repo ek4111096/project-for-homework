@@ -41,7 +41,7 @@ public class Main {
         names.add("Katya");
         names.add("Sasha");
         names.add("Anna");
-        System.out.println(names.contains("Lena")?true:false);
+        System.out.println(names.contains("Lena")); //redundant check removed
         System.out.println(names);
 
     }
