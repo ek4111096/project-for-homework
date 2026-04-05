@@ -1,35 +1,35 @@
 public class MathOperations {
     public static void main(String[] args) {
-        int sum = add(5,3);
-        System.out.println("The result of method add " + sum);
+        int addtResult = add(5,3);
+        System.out.println("The result of method add " + addtResult);
 
-        int sum1 = subtract(5,3);
-        System.out.println("The result of method subtract " + sum1);
+        int subtractResult = subtract(5,3);
+        System.out.println("The result of method subtract " + subtractResult);
 
-        int sum2 = multiply(6,8);
-        System.out.println("The result of method multiply " + sum2);
+        int multiplytResult = multiply(6,8);
+        System.out.println("The result of method multiply " + multiplytResult);
 
-        double sum3 = divide(4,3);
-        System.out.println("The result of method divide " + sum3);
+        double divideResult = divide(4,3);
+        System.out.println("The result of method divide " + divideResult);
 
-        int max = findMax(5,3);
-        System.out.println("The result of method findMax " + max);
+        int findMaxResult = findMax(5,3);
+        System.out.println("The result of method findMax " + findMaxResult);
 
-        int module = difference(7,8);
-        System.out.println("The result of method difference " + module);
+        int differenceResult = difference(7,8);
+        System.out.println("The result of method difference " + differenceResult);
 
-        int sqArea = squareArea(8);
-        System.out.println("The result of method squareArea " + sqArea);
+        int sqAreaResult = squareArea(8);
+        System.out.println("The result of method squareArea " + sqAreaResult);
 
-        int perimeter = squarePerimeter(6);
-        System.out.println("The result of method squarePerimeter " + perimeter);
+        int perimeterResult = squarePerimeter(6);
+        System.out.println("The result of method squarePerimeter " + perimeterResult);
 
-        double minutes = convertSecondsToMinutes(800);
-        System.out.println("The result of method convertSecondsToMinutes " + minutes);
+        double convertSecondsToMinutesResult = convertSecondsToMinutes(800);
+        System.out.println("The result of method convertSecondsToMinutes " + convertSecondsToMinutesResult);
 
         double speed1 = averageSpeed(100, 3);
         double speed2 = averageSpeed(300, 7);
-        System.out.println("The results of method averageSpeed " + speed1 + ", " + speed2);
+        System.out.println("The result of method averageSpeed " + speed1 + ", " + speed2);
 
         double hypotenuse = findHypotenuse(7, 8);
         double hypotenuse1 = findHypotenuse(9,2);
@@ -60,7 +60,12 @@ public class MathOperations {
         return x * y;
     }
 
-    public static double divide(int x, int y) {
+    public static double divide(double x, double y) {
+
+        if (y == 0.00) {
+            throw new ArithmeticException("Division by zero is prohibited");
+        }
+
         return x / y;
     }
 
@@ -84,6 +89,9 @@ public class MathOperations {
     }
 
     public static double averageSpeed(double distance, double time) {
+        if (time == 0.00) {
+            throw new ArithmeticException("Division by zero is prohibited");
+        }
         return distance / time;
     }
 
