@@ -26,6 +26,6 @@ public class Laptop {
     }
 
     void printInfo(){
-        System.out.println("The brand is " + this.brand + ", the prise is " + this.price);
+        System.out.println("The brand is " + this.brand + ", the price is " + this.price);
     }
 }

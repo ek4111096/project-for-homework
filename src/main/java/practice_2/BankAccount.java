@@ -2,7 +2,7 @@ package practice_2;
 
 public class BankAccount {
     String owner;
-    Double balance;
+    double balance;
 
     BankAccount(String owner, double balance){
         this.owner = owner;
@@ -21,12 +21,12 @@ public class BankAccount {
         this.owner = newOwner;
     }
 
-    double deposit(double amount){
-        return balance += amount;
+    void deposit(double amount){
+        balance += amount;
     }
 
-    double withdraw(double amount){
-        return balance -= amount;
+    void withdraw(double amount){
+        balance -= amount;
     }
 
     void printBalance(){

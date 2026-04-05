@@ -21,7 +21,7 @@ public class Product {
     }
 
     double applyDiscount(double discount) {
-        return this.price = this.price * 0.05;
+        return this.price = this.price - this.price * discount/100;
     }
 
     void printInfo(){

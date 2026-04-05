@@ -21,8 +21,8 @@ public class Rectangle {
         this.width = newWidth;
     }
 
-    int calculateArea(int width, int height){
-        return width * height;
+    int calculateArea(){
+        return this.width * this.height;
     }
 
 }

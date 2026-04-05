@@ -11,7 +11,7 @@ public class Main {
         //Rectangle
         Rectangle rectangle = new Rectangle(5, 6);
         rectangle.setWidth(7);
-        int area = rectangle.calculateArea(rectangle.width, rectangle.height);
+        int area = rectangle.calculateArea();
         System.out.println("The area of rectangle "+ area);
 
         //Book
@@ -38,10 +38,10 @@ public class Main {
         //Circle
         Circle circle = new Circle(22);
         circle.setRadius(15);
-        System.out.println(circle.calculateArea(circle.radius));
-        System.out.println(circle.calculateCircumference(circle.radius));
+        System.out.println(circle.calculateArea());
+        System.out.println(circle.calculateCircumference());
 
-        //Techer
+        //Teacher
         Teacher teacher = new Teacher("Anna", "biology");
         teacher.setSubject("Math");
         teacher.printInfo();
@@ -49,7 +49,7 @@ public class Main {
         //Product
         Product product = new Product("Milk", 100);
         product.setPrice(90);
-        product.applyDiscount(product.price);
+        product.applyDiscount(5);
         product.printInfo();
 
         //Laptop
