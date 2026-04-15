@@ -44,15 +44,15 @@ public class Main {
         System.out.println("Age is valid");
     }
     //4
-    public static void validateEmail(String string) {
+    public static void validateEmail(String email) {
         String regex = "^[\\w.-]+@[\\w.-]+\\.\\w+$";
 
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(string);
+        Matcher matcher = pattern.matcher(email);
 
         if (!matcher.matches()) {
-            throw new InvalidEmailException("Invalid email " + string);
+            throw new InvalidEmailException("Invalid email " + email);
         }
-        System.out.println("Email valid " + string);
+        System.out.println("Email valid " + email);
     }
 }
