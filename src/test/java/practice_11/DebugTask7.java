@@ -10,7 +10,9 @@ public class DebugTask7 {
     }
     public synchronized static void withdraw(int amount) {
         if (balance >= amount) {
-            try { Thread.sleep(100); } catch (InterruptedException e) { }
+            try { Thread.sleep(100); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             balance -= amount;
             System.out.println("New balance: " + balance);
         }
