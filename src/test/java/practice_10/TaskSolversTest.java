@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaskSolversTest extends TaskSolvers {
+public class TaskSolversTest  {
     TaskSolvers taskSolvers = new TaskSolvers();
 
     //1
@@ -31,7 +31,13 @@ public class TaskSolversTest extends TaskSolvers {
     @ParameterizedTest
     @ValueSource(ints = {6, 0, -6})
     public void  checkNumberIsEven(int number) {
-        assertTrue(isEven(number), "number is even");
+        assertTrue(taskSolvers.isEven(number), "number is even");
+    }
+    //negative case: numbers - odd
+    @ParameterizedTest
+    @ValueSource(ints = {5, 3, 1})
+    public void checkNumberIsOdd(int number) {
+        assertFalse(taskSolvers.isEven(number), "number is odd");
     }
 
     //2
@@ -107,6 +113,7 @@ public class TaskSolversTest extends TaskSolvers {
      *
      * negative cases:
      * - empty array
+     * - null - NullPointerException
      * corner cases:
      * - one element in an array -> [5], 5
      */
@@ -131,6 +138,13 @@ public class TaskSolversTest extends TaskSolvers {
             taskSolvers.findMax(new int[]{});
         }, "No value should lead to NoSuchElementException");
     }
+    //negative case: null -> NullPointerException
+    @Test
+    public void checkFindMaxWithNull() {
+        assertThrows(NullPointerException.class, () -> {
+            taskSolvers.findMax(null);
+        }, "Null should lead to NullPointerException");
+    }
 
     //5
     /**
@@ -142,7 +156,7 @@ public class TaskSolversTest extends TaskSolvers {
      * negative cases:
      * -
      * corner cases:
-     * - years are divdsible by 100 but not by 400 (1900, 2100)
+     * - years are divisible by 100 but not by 400 (1900, 2100)
      */
 
     @ParameterizedTest
@@ -217,9 +231,9 @@ public class TaskSolversTest extends TaskSolvers {
 
     @ParameterizedTest
     @MethodSource("numberProvider")
-    public void checkFactorial(int input, int expectadResult) {
+    public void checkFactorial(int input, int expectedResult) {
         int actualResult = taskSolvers.factorial(input);
-        assertEquals(expectadResult, actualResult);
+        assertEquals(expectedResult, actualResult);
     }
 
     @ParameterizedTest
@@ -238,13 +252,13 @@ public class TaskSolversTest extends TaskSolvers {
      * - check: array with identical numbers
      * negative cases:
      * - one element in array -> IllegalArgumentException
+     * invalid array with duplicates -> NoSuchElementException
      */
      public static Stream<Arguments> arrayProviderForFindSecondMax() {
          return Stream.of(
                  Arguments.of(new int[] {5, 7, 58, 23, -6}, 23),
                  Arguments.of(new int[] {69, 35, 11}, 35),
-                 Arguments.of(new int[] {5, 7, 7, 23, -6}, 7),
-                 Arguments.of(new int[] {7, 7, 7, 8}, 7)
+                 Arguments.of(new int[] {5, 7, 23, -6}, 7)
          );
      }
      @ParameterizedTest
@@ -260,6 +274,13 @@ public class TaskSolversTest extends TaskSolvers {
              taskSolvers.findSecondMax(new int[] {1});
          });
      }
+    //negative case: invalid array with duplicates -> NoSuchElementException
+     @Test
+     public void checkFindSecondMaxWithInvalidArray() {
+         assertThrows(NoSuchElementException.class, () -> {
+             taskSolvers.findSecondMax(new int[] {7, 7, 7, 8});
+         }, "Invalid array should lead to NoSuchElementException");
+    }
 
      //9
     /**
@@ -273,7 +294,7 @@ public class TaskSolversTest extends TaskSolvers {
     public static Stream<Arguments> stringProvider() {
         return Stream.of(
                 Arguments.of("", 0),
-                Arguments.of("Strinh with multiple spaces for test", 6)
+                Arguments.of("hello java test", 3)
         );
     }
     @ParameterizedTest
