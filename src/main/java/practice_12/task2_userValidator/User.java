@@ -1,43 +1,37 @@
 package practice_12.task2_userValidator;
 
-public abstract class User {
-    private boolean validationEnabled;
+public class User {
     private String name;
     private int age;
     private String email;
 
-    public User(String email, int age, String name) {
-
-        this.email = email;
-        this.age = age;
+    public User(String name, int age, String email) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public int getAge() {
-        return this.age;
+        this.age = age;
+        this.email = email;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public boolean getValidationEnabled() {
-        return this.validationEnabled;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public int getAge() {
+        return age;
     }
 
     public void setAge(int age) {
         this.age = age;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

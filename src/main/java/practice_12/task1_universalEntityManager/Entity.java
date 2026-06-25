@@ -8,13 +8,9 @@ public abstract class Entity {
     private boolean isActive;
 
     public Entity(int age, String name, boolean isActive) {
-
         if (age < 10 || age > 120) {
-            throw new IllegalArgumentException(
-                    "Age must be between 10 and 120"
-            );
+            throw new IllegalArgumentException("Age should be between 10 and 120");
         }
-
         this.age = age;
         this.name = name;
         this.isActive = isActive;
@@ -22,38 +18,30 @@ public abstract class Entity {
 
     public Entity(int age, String name) {
         if (age < 10 || age > 120) {
-            throw new IllegalArgumentException(
-                    "Age must be between 10 and 120"
-            );
+            throw new IllegalArgumentException("Age should be between 10 and 120");
         }
         this.age = age;
         this.name = name;
     }
 
     public int getAge() {
-
-        return this.age;
+        return age;
     }
 
     public String getName() {
-
-        return this.name;
-    }
-
-    public boolean IsActive() {
-
-        return isActive;
+        return name;
     }
 
     public void setAge(int age) {
-        if (age > 0 ) {
-            this.age = age;
-        } else System.out.println("Вы ввели невалидный возраст");
+        this.age = age;
     }
 
     public void setName(String name) {
-
         this.name = name;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     @Override
