@@ -29,7 +29,7 @@ public class EntityManager <T extends Entity> {
     }
 
     public List<T> filteredByStatus(boolean isActive) {
-        return entities.stream().filter(entity -> entity.isActive())
+        return entities.stream().filter(entity -> entity.isActive() == isActive)
                 .collect(Collectors.toList());
     }
 

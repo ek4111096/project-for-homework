@@ -69,16 +69,16 @@ public class TaskManagerTest {
         Task<UUID> task3 = new Task<>(LocalDate.of(2026, 6, 22), 1, "Active", UUID.fromString("433e4567-e89b-12d3-a456-426614174000"));
         Task<UUID> task4 = new Task<>(LocalDate.of(2026, 6, 22), 1, "Active", UUID.fromString("533e4567-e89b-12d3-a456-426614174000"));
         Task<UUID> taskNewObject = new Task<>(LocalDate.of(2026, 6, 23), 1, "Active", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
-        service.removeTask(task);
+        service.removeTask(task.getID());
         assertEquals(0, service.tasks.size());
         service.addTask(task);
         service.addTask(task1);
         service.addTask(task3);
-        service.removeTask(task);
+        service.removeTask(task.getID());
         assertEquals(2, service.tasks.size());
         assertFalse(service.tasks.contains(task));
-        Thread thread1 = new Thread(() -> service.removeTask(task1));
-        Thread thread2 = new Thread(() -> service.removeTask(task3));
+        Thread thread1 = new Thread(() -> service.removeTask(task1.getID()));
+        Thread thread2 = new Thread(() -> service.removeTask(task3.getID()));
 
         thread1.start();
         thread2.start();
@@ -104,7 +104,7 @@ public class TaskManagerTest {
         service.addTask(task2);
         service.addTask(task3);
 
-        List<Task<UUID>> actualResult = service.findTaskByStatus();
+        List<Task<UUID>> actualResult = service.findTaskByStatus("Active");
         assertEquals(3, actualResult.size());
         assertFalse(actualResult.contains(task2));
     }
@@ -120,7 +120,7 @@ public class TaskManagerTest {
         service.addTask(task2);
         service.addTask(task3);
 
-        List<Task<UUID>> actualResult = service.findTaskByPriority();
+        List<Task<UUID>> actualResult = service.findTaskByPriority(3);
         assertEquals(2, actualResult.size());
         assertTrue(actualResult.contains(task));
         assertFalse(actualResult.contains(task3));

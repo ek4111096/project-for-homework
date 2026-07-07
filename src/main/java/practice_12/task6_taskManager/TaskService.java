@@ -14,30 +14,26 @@ public class TaskService<T> {
         tasks.add(task);
     }
 
-    public synchronized void removeTask(Task<T> task) {
-        T taskId = task.getID();
-
+    public synchronized void removeTask(T taskId) {
         Iterator<Task<T>> iterator = tasks.iterator();
 
         while (iterator.hasNext()) {
-            Task<T> t = iterator.next();
-
-            if (t.getID().equals(taskId)) {
+            if (iterator.next().getID().equals(taskId)) {
                 iterator.remove();
                 return;
             }
         }
     }
 
-    public List<Task<T>> findTaskByStatus() {
+    public List<Task<T>> findTaskByStatus(String status) {
         return tasks.stream()
-                .filter(t -> Objects.equals(t.getStatus(), ACTIVE))
+                .filter(t -> Objects.equals(t.getStatus(), status))
                 .collect(Collectors.toList());
     }
 
-    public List<Task<T>> findTaskByPriority() {
+    public List<Task<T>> findTaskByPriority(int maxPriority) {
         return tasks.stream()
-                .filter(t -> t.getPriority() < 3)
+                .filter(t -> t.getPriority() < maxPriority)
                 .collect(Collectors.toList());
     }
 

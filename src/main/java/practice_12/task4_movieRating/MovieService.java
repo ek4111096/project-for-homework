@@ -48,7 +48,7 @@ public class MovieService<T extends Number> {
                 ));
         Map<Movie, Double> sortedResult = avgMovieRating.entrySet()
                 .stream()
-                .sorted(Map.Entry.comparingByValue())
+                .sorted(Map.Entry.<Movie, Double>comparingByValue().reversed())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,

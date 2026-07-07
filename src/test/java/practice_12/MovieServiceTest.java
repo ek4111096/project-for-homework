@@ -83,9 +83,9 @@ public class MovieServiceTest {
 
         Map<Movie, Double> actualResult = service.getSortedMoviesByRating();
         Map<Movie, Double> expectedResult = new LinkedHashMap<>();
-        expectedResult.put(new Movie<>("Avatar"), 3.0);
-        expectedResult.put(new Movie<>("Titanik"), 8.0);
         expectedResult.put(new Movie<>("Interstellar"), 9.7);
+        expectedResult.put(new Movie<>("Titanik"), 8.0);
+        expectedResult.put(new Movie<>("Avatar"), 3.0);
 
         assertEquals(expectedResult, actualResult);
 

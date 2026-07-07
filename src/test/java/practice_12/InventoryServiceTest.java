@@ -61,8 +61,8 @@ public class InventoryServiceTest {
     @Test
     public void filterdProductsByPriceTest() {
         InventoryService service = new InventoryService();
-        Product phone1 = new Product("Moto", "phone", 102);
-        Product phone2 = new Product("Iphone", "phone", 100);
+        Product phone1 = new Product("Moto", "phone", 100);
+        Product phone2 = new Product("Iphone", "phone", 102);
         Product phone3 = new Product("Samsung", "phone", 101);
         Product phone4 = new Product("Honor", "phone", 0);
         Product phone5 = new Product("Siemens", "phone", 99);
@@ -74,9 +74,9 @@ public class InventoryServiceTest {
         service.filterdProductsByPrice(phone1);
         List<Product> list = service.filterdProductsByPrice(phone1);
         assertEquals(2, list.size());
-        assertTrue(list.contains(phone1));
+        assertTrue(list.contains(phone2));
         assertTrue(list.contains(phone3));
-        assertFalse(list.contains(phone2));
+        assertFalse(list.contains(phone1));
 
     }
 }

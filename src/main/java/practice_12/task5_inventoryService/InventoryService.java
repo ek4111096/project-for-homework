@@ -33,7 +33,7 @@ public class InventoryService {
     public List<Product> filterdProductsByPrice(Product product) {
         List<Product> productsFiltered = getProductsByCategory(product);
         return productsFiltered.stream()
-                .filter(p -> p.getPrice() > 100)
+                .filter(p -> p.getPrice() > product.getPrice())
                 .collect(Collectors.toList());
     }
 }

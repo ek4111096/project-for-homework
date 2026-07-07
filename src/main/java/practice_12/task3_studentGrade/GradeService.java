@@ -10,7 +10,9 @@ public class GradeService<T extends Number> {
 
     public synchronized void addGrade(StudentGrade<T> grade) {
         T gradeValue = grade.getGrade();
-        if (gradeValue.doubleValue() > 0) {
+        if (gradeValue.doubleValue() < 0) {
+            throw new InvalidGradeException("Grade should be positive");
+        } else {
             gradeList.add(grade);
         }
     }
