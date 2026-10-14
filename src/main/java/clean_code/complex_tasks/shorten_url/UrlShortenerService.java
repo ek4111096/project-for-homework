@@ -5,7 +5,7 @@ public class UrlShortenerService {
     private final UrlStorage storage;
 
     public UrlShortenerService(ShortenerFactory shortenerFactory) {
-        this.strategy = shortenerFactory.createStratagy();
+        this.strategy = shortenerFactory.createStrategy();
         this.storage = UrlStorage.getInstance();
     }
 

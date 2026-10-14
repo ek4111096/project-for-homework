@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UrlStorage {
-    private static final UrlStorage INSTANCE = new UrlStorage();
+    private static UrlStorage urlStorage;
 
     private final Map<String, String> storage = new HashMap<>();
 
     public static UrlStorage getInstance() {
-        return INSTANCE;
+        if (urlStorage == null) {
+            urlStorage = new UrlStorage();
+        }
+        return urlStorage;
     }
 
     public void save(String shortUrl, String longUrl) {

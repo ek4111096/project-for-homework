@@ -7,7 +7,8 @@ public class ShortenerFactory {
         this.strategy = strategy;
     }
 
-    public ShorteningStrategy createStratagy() {
+    public ShorteningStrategy createStrategy() {
+
         return strategy;
     }
 }

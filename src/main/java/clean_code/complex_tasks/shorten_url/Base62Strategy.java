@@ -3,10 +3,11 @@ package clean_code.complex_tasks.shorten_url;
 public class Base62Strategy implements ShorteningStrategy {
     private static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private int id = 1;
+    private static int id = 1;
 
     @Override
     public String shorten(String url) {
+
         return toBase62(id++);
     }
 

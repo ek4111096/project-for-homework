@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class VideoService {
-    private List<VideoAdapter> adapters;
+    private final List<VideoAdapter> adapters;
 
     public VideoService(VideoAdapter... adapters) {
         this.adapters = new ArrayList<>(Arrays.asList(adapters));
