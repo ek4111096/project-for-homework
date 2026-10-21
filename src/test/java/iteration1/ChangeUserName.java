@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
+import static java.util.function.Predicate.not;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 
 public class ChangeUserName {
     @BeforeAll
@@ -57,6 +62,15 @@ public class ChangeUserName {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
+        //добавила проверку состяния сервера через get запрос
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/profile")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("name", equalTo("Elena Kuznetsova"));
     }
 
     //негативные тесты по изменению имени
@@ -108,7 +122,7 @@ public class ChangeUserName {
                 .put("http://localhost:4111/api/v1/customer/profile")
                 .then()
                 .statusCode(expectedStatus)
-                .body(Matchers.equalTo(expectedMessage));
+                .body(equalTo(expectedMessage));
     }
 
     //Негативный кейс по изменению имени юзера со значением null
@@ -143,5 +157,49 @@ public class ChangeUserName {
                 .put("http://localhost:4111/api/v1/customer/profile")
                 .then()
                 .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+    }
+
+    //проверки через get того, что негативные тест-кейсы не изменили состояние сервера
+    public static Stream<Arguments> changeNameInvalidResponceData() {
+        return Stream.of(
+                Arguments.of("Elena "),
+                Arguments.of("Elena"),
+                Arguments.of("Elena  Kuz"),
+                Arguments.of("Elena  Kuz "),
+                Arguments.of("Elena!  Kuz$"),
+                Arguments.of("123 456"),
+                Arguments.of(" "),
+                Arguments.of("")
+        );
+    }
+
+    @MethodSource("changeNameInvalidResponceData")
+    @ParameterizedTest
+    public void checkThatUserCanNotChangeNameWithInvalidData(String name) {
+        // получаем токен юзера
+        String userAuthHeader = given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("""
+                        {
+                          "username": "milli2013",
+                          "password": "myPassword456!"
+                        }
+                        """)
+                .post("http://localhost:4111/api/v1/auth/login")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .header("Authorization");
+
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/profile")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("name", not(equalTo(name)));
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 public class TransferUserTest {
     @BeforeAll
@@ -90,6 +91,18 @@ public class TransferUserTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
+        //добавила проверку состяния сервера через get запрос
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/accounts")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(
+                        "find { it.id == 2 }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 10000 }",
+                        notNullValue()
+                );
     }
     @Test
     public void userCanMakeTransferSum9999Test() {
@@ -125,6 +138,18 @@ public class TransferUserTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
+        //проверка состояния сервера через get
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/accounts")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(
+                        "find { it.id == 2 }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 9999 }",
+                        notNullValue()
+                );
     }
 
     public static Stream<Arguments> transferInvalidData() {
@@ -175,6 +200,80 @@ public class TransferUserTest {
                 .then()
                 .statusCode(expectedStatus)
                 .body(Matchers.equalTo(expectedMessage));
+    }
+    //проверки через get того, что негативные тест-кейсы не изменили состояние сервера
+    public static Stream<Arguments> transferInvalidResponceData() {
+        return Stream.of(
+                Arguments.of(10001.0),
+                Arguments.of(10000.1),
+                Arguments.of(6000),
+                Arguments.of(0.0)
+        );
+    }
+
+    @MethodSource("transferInvalidResponceData")
+    @ParameterizedTest
+    public void checkThatUserCanNotMakeTransferWithInvalidData(double amount) {
+        // получаем токен юзера
+        String userAuthHeader = given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("""
+                        {
+                          "username": "milli2013",
+                          "password": "myPassword456!"
+                        }
+                        """)
+                .post("http://localhost:4111/api/v1/auth/login")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .header("Authorization");
+
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/accounts")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(
+                        "find { it.id == 2 }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == " + amount + " }",
+                        Matchers.nullValue());
+
+    }
+    //проверка через get того, что тест-кейс с отрицательным значением не изменил состояние сервера
+    @Test
+    public void checkThatUserCanNotMakeTransferWithINegativeData() {
+        // получаем токен юзера
+        String userAuthHeader = given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("""
+                        {
+                          "username": "milli2013",
+                          "password": "myPassword456!"
+                        }
+                        """)
+                .post("http://localhost:4111/api/v1/auth/login")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .header("Authorization");
+
+        given()
+                .header("Authorization", userAuthHeader)
+                .accept(ContentType.JSON)
+                .when()
+                .get("http://localhost:4111/api/v1/customer/accounts")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(
+                        "find { it.id == 2 }.transactions.findAll { it.type == 'TRANSFER_OUT' && it.amount == (-1.0) }",
+                        Matchers.empty()
+                );
     }
 
     //Предусловие, выполняемое 1 раз
@@ -260,6 +359,18 @@ public class TransferUserTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
+        //проверка состояния сервера через get
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", userAuthHeader)
+                .get("http://localhost:4111/api/v1/customer/accounts")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(
+                        "find { it.id == 2 }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 1000 }",
+                        notNullValue()
+                );
     }
 
 
