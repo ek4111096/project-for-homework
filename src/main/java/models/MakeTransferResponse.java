@@ -1,0 +1,17 @@
+package models;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class MakeTransferResponse extends BaseModel{
+    private String message;
+    private double amount;
+    private long receiverAccountId;
+    private long senderAccountId;
+}
