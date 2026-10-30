@@ -1,143 +1,204 @@
 package iteration1.middle;
 
 import generators.RandomData;
-import io.restassured.http.ContentType;
-import models.CreateUserRequest;
-import models.MakeDepositRequest;
-import models.MakeTransferRequest;
-import models.UserRole;
-import org.apache.http.HttpStatus;
+import models.*;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import requests.*;
 import specs.RequestSpecs;
 import specs.ResponseSpecs;
 
 import java.util.stream.Stream;
 
+import static generators.TestUtils.repeat;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsNull.notNullValue;
+import org.junit.jupiter.api.Test;
 
 public class TransferUserTest {
-    @Test
-    public void createUserAndCreateAccount() {
-        //Предусловие, выполняемое перед всеми тестами, но 1 раз
-        //запрос на создание юзера
+    //добавлена параметризация
+    //убран JSONPath
+    //вынесен цикл в универсальный метод repeat()
+    @ParameterizedTest
+    @ValueSource(doubles = {10000.0, 9999.99})
+    public void createUserAndTransferBetweenAccounts(double amount) {
+        // Создаём пользователя
         CreateUserRequest userRequest = CreateUserRequest.builder()
                 .username(RandomData.getUsername())
                 .password(RandomData.getPassword())
                 .role(UserRole.USER.toString())
                 .build();
-        //Админ создает юзера
+
         new AdminCreateUserRequester(
                 RequestSpecs.adminSpec(),
                 ResponseSpecs.entityWasCreated())
                 .post(userRequest);
-        // Создание аккаунта у пользователя
-        int accountFirstId = new CreateAccountRequester(
+
+        // Создаём первый счёт
+        AccountResponse firstAccountResponse = new CreateAccountRequester(
                 RequestSpecs.authAsUser(
                         userRequest.getUsername(),
                         userRequest.getPassword()),
                 ResponseSpecs.entityWasCreated())
-                .post(null)
+                .post()
                 .extract()
-                .jsonPath()
-                .getInt("id");
-        //Кладём 25000 на счёт четырьмя депозитами по 5000
+                .as(AccountResponse.class);
+
+        long accountFirstId = firstAccountResponse.getId();
+
+        // Создаём второй счёт
+        AccountResponse secondAccountResponse = new CreateAccountRequester(
+                RequestSpecs.authAsUser(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()),
+                ResponseSpecs.entityWasCreated())
+                .post()
+                .extract()
+                .as(AccountResponse.class);
+
+        long accountSecondId = secondAccountResponse.getId();
+
+        // Пополняем первый счёт пять раз по 5000
         MakeDepositRequest depositRequest = MakeDepositRequest.builder()
                 .id(accountFirstId)
                 .balance(5000)
                 .build();
+
         MakeDepositRequester depositRequester = new MakeDepositRequester(
-                RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
-                ResponseSpecs.requestReturnsOK()
-        );
-        for (int i = 0; i < 5; i++) {
-            depositRequester.post(depositRequest);
-        }
-        //Создание второго аккаунта у пользователя
-        int accountSecondId = new CreateAccountRequester(
+                RequestSpecs.authAsUser(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()),
+                ResponseSpecs.requestReturnsOK());
+
+        repeat(5, () -> depositRequester.post(depositRequest));
+        // Выполняем перевод
+        MakeTransferRequest transferRequest = MakeTransferRequest.builder()
+                .senderAccountId(accountFirstId)
+                .receiverAccountId(accountSecondId)
+                .amount(amount)
+                .build();
+
+        new MakeTransferRequester(
+                RequestSpecs.authAsUser(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()),
+                ResponseSpecs.requestReturnsOK())
+                .post(transferRequest);
+
+        // Проверяем состояние счетов через GET
+        AccountResponse[] accounts = new GetUserAccountsRequester(
+                RequestSpecs.authAsUser(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()),
+                ResponseSpecs.requestReturnsOK())
+                .get()
+                .extract()
+                .as(AccountResponse[].class);
+
+        // Проверяем исходящую транзакцию
+        ResponseSpecs.transferTransactionExists(
+                accounts, accountFirstId, amount);
+
+    }
+
+    // Позитивный тест-кейс перевод со счета первого пользователя на счет второго пользователя 1000
+    @Test
+    public void userCanTransferMoneyToAnotherUser() {
+
+        // Создаём первого пользователя
+        CreateUserRequest userRequest = CreateUserRequest.builder()
+                .username(RandomData.getUsername())
+                .password(RandomData.getPassword())
+                .role(UserRole.USER.toString())
+                .build();
+
+        new AdminCreateUserRequester(
+                RequestSpecs.adminSpec(),
+                ResponseSpecs.entityWasCreated())
+                .post(userRequest);
+
+        // Создаём счёт первого пользователя
+        AccountResponse firstAccountResponse = new CreateAccountRequester(
                 RequestSpecs.authAsUser(
                         userRequest.getUsername(),
                         userRequest.getPassword()),
                 ResponseSpecs.entityWasCreated())
-                .post(null)
+                .post()
                 .extract()
-                .jsonPath()
-                .getInt("id");
-        //Создание 2 юзера
+                .as(AccountResponse.class);
+
+        long accountFirstId = firstAccountResponse.getId();
+
+        // Создаём второго пользователя
         CreateUserRequest secondUserRequest = CreateUserRequest.builder()
                 .username(RandomData.getUsername())
                 .password(RandomData.getPassword())
                 .role(UserRole.USER.toString())
                 .build();
-        //Админ создает второго юзера
+
         new AdminCreateUserRequester(
                 RequestSpecs.adminSpec(),
                 ResponseSpecs.entityWasCreated())
                 .post(secondUserRequest);
-        // Создание аккаунта у второго пользователя
-        int secondUserAccountId = new CreateAccountRequester(
+
+        // Создаём счёт второго пользователя
+        AccountResponse secondAccountResponse = new CreateAccountRequester(
+                RequestSpecs.authAsUser(
+                        secondUserRequest.getUsername(),
+                        secondUserRequest.getPassword()),
+                ResponseSpecs.entityWasCreated())
+                .post()
+                .extract()
+                .as(AccountResponse.class);
+
+        long accountSecondId = secondAccountResponse.getId();
+
+        // Пополняем счёт первого пользователя пять раз по 5000
+        MakeDepositRequest depositRequest = MakeDepositRequest.builder()
+                .id(accountFirstId)
+                .balance(5000)
+                .build();
+
+        MakeDepositRequester depositRequester = new MakeDepositRequester(
                 RequestSpecs.authAsUser(
                         userRequest.getUsername(),
                         userRequest.getPassword()),
-                ResponseSpecs.entityWasCreated())
-                .post(null)
-                .extract()
-                .jsonPath()
-                .getInt("id");
-        //перевод с 1 счета на другой граница 10000
+                ResponseSpecs.requestReturnsOK());
+
+        repeat(5, () -> depositRequester.post(depositRequest));
+
+        // Переводим 1000 второму пользователю
         MakeTransferRequest transferRequest = MakeTransferRequest.builder()
                 .senderAccountId(accountFirstId)
                 .receiverAccountId(accountSecondId)
-                .amount(10000)
-                .build();
-        new MakeTransferRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
-                ResponseSpecs.requestReturnsOK())
-                .post(transferRequest);
-        //проверка состояния сервера через get запрос
-        new GetUserAccountsRequester(
-                RequestSpecs.authAsUser(
-                        userRequest.getUsername(),
-                        userRequest.getPassword()),
-                ResponseSpecs.transferTransactionExistsBorder10000(accountFirstId))
-                .get();
-        //перевод с 1 счета на другой граница 9999
-        MakeTransferRequest transferRequest1 = MakeTransferRequest.builder()
-                .senderAccountId(accountFirstId)
-                .receiverAccountId(accountSecondId)
-                .amount(9999)
-                .build();
-        new MakeTransferRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
-                ResponseSpecs.requestReturnsOK())
-                .post(transferRequest1);
-        //проверка состояния сервера через get запрос
-        new GetUserAccountsRequester(
-                RequestSpecs.authAsUser(
-                        userRequest.getUsername(),
-                        userRequest.getPassword()),
-                ResponseSpecs.transferTransactionExistsBorder9999(accountFirstId))
-                .get();
-        //Позитивный тест-кейс перевод со счета одного юзера на счет другого юзера 1000
-        MakeTransferRequest transferToAnotherUserRequest = MakeTransferRequest.builder()
-                .senderAccountId(accountFirstId)
-                .receiverAccountId(secondUserAccountId)
                 .amount(1000)
                 .build();
-        new MakeTransferRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
-                ResponseSpecs.requestReturnsOK())
-                .post(transferToAnotherUserRequest);
-        //проверка состояния сервера через get запрос
-        new GetUserAccountsRequester(
+
+        new MakeTransferRequester(
                 RequestSpecs.authAsUser(
                         userRequest.getUsername(),
                         userRequest.getPassword()),
-                ResponseSpecs.transferTransactionExistsBorder1000(accountFirstId))
-                .get();
-        }
+                ResponseSpecs.requestReturnsOK())
+                .post(transferRequest);
+
+        // Проверяем транзакцию
+        AccountResponse[] firstUserAccounts = new GetUserAccountsRequester(
+                RequestSpecs.authAsUser(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()),
+                ResponseSpecs.requestReturnsOK())
+                .get()
+                .extract()
+                .as(AccountResponse[].class);
+
+        ResponseSpecs.transferTransactionExists(
+                firstUserAccounts, accountFirstId, 1000);
+
+    }
+
     //негативные тест-кейсы
     private static CreateUserRequest userRequest;
     private static int accountId1;

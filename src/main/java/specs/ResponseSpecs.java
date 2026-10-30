@@ -2,8 +2,19 @@ package specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
+import models.AccountResponse;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+
+
+
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ResponseSpecs {
     private ResponseSpecs() {}
@@ -31,21 +42,15 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification depositTransactionExistsBorder5000(int accountId) {
-        return defaultResponseBuilder()
-                .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 5000 }",
-                        Matchers.notNullValue()
-                )
-                .build();
-    }
+    public static ResponseSpecification depositTransactionExists(
+            long accountId, double amount) {
 
-    public static ResponseSpecification depositTransactionExistsBorder4999(int accountId) {
-        return defaultResponseBuilder()
+        return new ResponseSpecBuilder()
                 .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 4999 }",
-                        Matchers.notNullValue()
-                )
+                        "find { it.id == " + accountId +
+                                " }.transactions.find { it.type == 'DEPOSIT' && " +
+                                "it.amount.toString() == '" + amount + "' }",
+                        notNullValue())
                 .build();
     }
 
@@ -56,7 +61,7 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification depositTransactionDoesNotExist(int accountId, double amount) {
+    public static ResponseSpecification depositTransactionDoesNotExist(long accountId, double amount) {
         return defaultResponseBuilder()
                 .expectBody(
                         "find { it.id == " + accountId
@@ -66,23 +71,6 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification transferTransactionExistsBorder10000(int accountId) {
-        return defaultResponseBuilder()
-                .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 10000 }",
-                        Matchers.notNullValue()
-                )
-                .build();
-    }
-
-    public static ResponseSpecification transferTransactionExistsBorder9999(int accountId) {
-        return defaultResponseBuilder()
-                .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 9999 }",
-                        Matchers.notNullValue()
-                )
-                .build();
-    }
 
     public static ResponseSpecification transferTransactionDoesNotExist(
             int accountId, double amount) {
@@ -94,13 +82,28 @@ public class ResponseSpecs {
                 )
                 .build();
     }
-    public static ResponseSpecification transferTransactionExistsBorder1000(int accountId) {
-        return defaultResponseBuilder()
-                .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'TRANSFER_OUT' && it.amount == 1000 }",
-                        Matchers.notNullValue()
-                )
-                .build();
+
+    public static void transferTransactionExists(
+            AccountResponse[] accounts,
+            long accountId,
+            double expectedAmount) {
+
+        AccountResponse account = Arrays.stream(accounts)
+                .filter(a -> a.getId() == accountId)
+                .findFirst()
+                .orElseThrow(() ->
+                        new AssertionError("Account not found: " + accountId));
+
+        boolean transactionExists = account.getTransactions().stream()
+                .anyMatch(transaction ->
+                        "TRANSFER_OUT".equals(transaction.getType())
+                                && BigDecimal.valueOf(transaction.getAmount())
+                                .compareTo(BigDecimal.valueOf(expectedAmount)) == 0);
+
+        if (!transactionExists) {
+            throw new AssertionError(
+                    "Transfer transaction not found. Amount: " + expectedAmount);
+        }
     }
 
     public static ResponseSpecification usernameChanged(String expectedName) {
@@ -114,6 +117,12 @@ public class ResponseSpecs {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_OK)
                 .expectBody("name", Matchers.equalTo(expectedName))
+                .build();
+    }
+
+    public static ResponseSpecification accountExists(long accountId) {
+        return new ResponseSpecBuilder()
+                .expectBody("id", hasItem((int) accountId))
                 .build();
     }
 }

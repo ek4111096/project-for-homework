@@ -21,6 +21,10 @@ public class CreateAccountRequester extends Request{
                 .assertThat()
                 .spec(responseSpecification);
     }
+    //перегрузила метод post()
+    public ValidatableResponse post() {
+        return post(null);
+    }
 
     @Override
     public ValidatableResponse get() {

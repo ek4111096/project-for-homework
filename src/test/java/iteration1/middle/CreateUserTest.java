@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import requests.AdminCreateUserRequester;
+import requests.GetCustomerProfileRequester;
 import specs.RequestSpecs;
 import specs.ResponseSpecs;
 
@@ -26,6 +27,11 @@ public class CreateUserTest extends BaseTest {
         CreateUserResponse createUserResponse = new AdminCreateUserRequester(RequestSpecs.adminSpec(),
                 ResponseSpecs.entityWasCreated())
                 .post(createUserRequest).extract().as(CreateUserResponse.class);
+
+        // Проверяем через GET, что пользователь действительно создан
+        new GetCustomerProfileRequester(RequestSpecs.authAsUser(createUserRequest.getUsername(), createUserRequest.getPassword()),
+                ResponseSpecs.usernameChanged(createUserResponse.getName()))
+                .get();
 
         softly.assertThat(createUserRequest.getUsername()).isEqualTo(createUserResponse.getUsername());
         softly.assertThat(createUserRequest.getPassword()).isNotEqualTo(createUserResponse.getPassword());

@@ -18,39 +18,12 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChangeUserNameTest extends BaseTest {
-    @Test
-    public void createUserAndCreateAccount() {
-        //Предусловие, выполняемое перед всеми тестами, но 1 раз
-        //запрос на создание юзера
-        CreateUserRequest userRequest = CreateUserRequest.builder()
-                .username(RandomData.getUsername())
-                .password(RandomData.getPassword())
-                .role(UserRole.USER.toString())
-                .build();
-        //Админ создает юзера
-        new AdminCreateUserRequester(
-                RequestSpecs.adminSpec(),
-                ResponseSpecs.entityWasCreated())
-                .post(userRequest);
-        //Позитивный кейс по изменению имени юзера
-        ChangeUserNameRequest changeUserNameRequest = new ChangeUserNameRequest().builder()
-                .name("Elena Nekuznetsova")
-                .build();
-        new ChangeUserNameRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
-                ResponseSpecs.requestReturnsOK())
-                .put(changeUserNameRequest);
-        //проверка состояния сервера через get запрос
-        new GetCustomerProfileRequester(
-                RequestSpecs.authAsUser(
-                        userRequest.getUsername(),
-                        userRequest.getPassword()),
-                ResponseSpecs.usernameChanged("Elena Nekuznetsova"))
-                .get();
-    }
-
-    //негативные тесты по изменению имени
+    //Убран хардкод
+    //Общие данные для тестов
     private static CreateUserRequest userRequest;
+    private static String originalName;
 
+    //Предусловие для негативных тестов
     @BeforeAll
     static void setUp() {
         userRequest = CreateUserRequest.builder()
@@ -59,19 +32,46 @@ public class ChangeUserNameTest extends BaseTest {
                 .role(UserRole.USER.toString())
                 .build();
 
+        //Админ создаёт пользователя
         new AdminCreateUserRequester(
                 RequestSpecs.adminSpec(),
                 ResponseSpecs.entityWasCreated()
         ).post(userRequest);
-        //Меняем имя юзера
-        ChangeUserNameRequest changeUserNameRequest = new ChangeUserNameRequest().builder()
-                .name("Elena Nekuznetsova")
-                .build();
+
+        //Устанавливаем исходное имя
+        originalName = RandomData.getName();
+
+        ChangeUserNameRequest changeUserNameRequest =
+                ChangeUserNameRequest.builder()
+                        .name(originalName)
+                        .build();
+
         new ChangeUserNameRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 ResponseSpecs.requestReturnsOK())
                 .put(changeUserNameRequest);
     }
 
+    // Позитивный тест
+    @Test
+    public void changeUserName() {
+        String newName = RandomData.getName();
+
+        ChangeUserNameRequest changeUserNameRequest =
+                ChangeUserNameRequest.builder()
+                        .name(newName)
+                        .build();
+
+        new ChangeUserNameRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                ResponseSpecs.requestReturnsOK())
+                .put(changeUserNameRequest);
+
+        // Проверяем, что имя изменилось
+        new GetCustomerProfileRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                ResponseSpecs.usernameChanged(newName))
+                .get();
+    }
+
+    // Негативные тестовые данные
     public static Stream<Arguments> userNameInvalidData() {
         return Stream.of(
                 Arguments.of("Elena ", 400, "Name must contain two words with letters only"),
@@ -85,21 +85,23 @@ public class ChangeUserNameTest extends BaseTest {
         );
     }
 
-    @MethodSource("userNameInvalidData")
+    // Негативные тесты по изменению имени
     @ParameterizedTest
+    @MethodSource("userNameInvalidData")
     public void userCanNotChangeNameWithInvalidData(String name, int expectedStatus, String expectedMessage) {
-        ChangeUserNameRequest changeUserNameRequest = new ChangeUserNameRequest().builder()
-                .name(name)
-                .build();
+
+        ChangeUserNameRequest changeUserNameRequest =
+                ChangeUserNameRequest.builder()
+                        .name(name)
+                        .build();
+
         new ChangeUserNameRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 ResponseSpecs.requestReturnsError(expectedStatus, expectedMessage))
                 .put(changeUserNameRequest);
-        //проверка через get того, что негативные тест-кейсы не изменили состояние сервера
-        new GetCustomerProfileRequester(
-                RequestSpecs.authAsUser(
-                        userRequest.getUsername(),
-                        userRequest.getPassword()),
-                ResponseSpecs.usernameNotChanged("Elena Nekuznetsova"))
+
+        // Проверяем, что негативный запрос не изменил имя
+        new GetCustomerProfileRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                ResponseSpecs.usernameNotChanged(originalName))
                 .get();
     }
 }
