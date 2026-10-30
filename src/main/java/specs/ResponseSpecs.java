@@ -27,27 +27,34 @@ public class ResponseSpecs {
     public static ResponseSpecification requestReturnsBadRequest(String errorKey, String errorValue) {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .expectBody(errorKey, Matchers.equalTo(errorValue))
+                .expectBody(errorKey, Matchers.hasItem(errorValue))
                 .build();
     }
 
-    public static ResponseSpecification depositTransactionExistsBorder5000(int accountId) {
+    public static ResponseSpecification depositTransactionExists(
+            long accountId, double amount) {
+
+        String expectedAmount = String.format(java.util.Locale.US, "%.2f", amount);
+
         return defaultResponseBuilder()
                 .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 5000 }",
+                        "find { it.id == " + accountId +
+                                " }.transactions.find { it.type == 'DEPOSIT' && " +
+                                "it.amount.toBigDecimal().compareTo(" +
+                                expectedAmount + "G) == 0 }",
                         Matchers.notNullValue()
                 )
                 .build();
     }
 
-    public static ResponseSpecification depositTransactionExistsBorder4999(int accountId) {
-        return defaultResponseBuilder()
-                .expectBody(
-                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 4999 }",
-                        Matchers.notNullValue()
-                )
-                .build();
-    }
+//    public static ResponseSpecification depositTransactionExistsBorder4999(int accountId) {
+//        return defaultResponseBuilder()
+//                .expectBody(
+//                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 4999 }",
+//                        Matchers.notNullValue()
+//                )
+//                .build();
+//    }
 
     public static ResponseSpecification requestReturnsError(int expectedStatus, String expectedMessage) {
         return defaultResponseBuilder()
@@ -56,7 +63,7 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification depositTransactionDoesNotExist(int accountId, double amount) {
+    public static ResponseSpecification depositTransactionDoesNotExist(long accountId, double amount) {
         return defaultResponseBuilder()
                 .expectBody(
                         "find { it.id == " + accountId
