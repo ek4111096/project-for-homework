@@ -1,0 +1,404 @@
+//Предусловие: создание пользователя с ролью Admin
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "helen1991",
+  "password": "myPassword123!»,
+  "role": "ADMIN"
+}'
+
+//Предусловие: создание пользователя с ролью User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "milli2013",
+  "password": "myPassword456!",
+  "role": "USER"
+}'
+
+
+//Предусловие: авторизация под ролью User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/auth/login' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "milli2013",
+  "password": "myPassword456!"
+}'
+
+//Предусловие: создание счета у User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -d ''
+
+
+
+//Позитивный тест: депозит в размере 5000 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": 5000
+}'
+
+//Позитивный тест: депозит в размере 4999 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": 4999
+}'
+
+
+
+//Негативный тест: депозит в размере 5001 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": 5001
+}'
+
+//Негативный тест: депозит в размере 5000.1 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": 5000.1
+}'
+
+
+//Негативный тест: депозит в размере -1 отрицательная сумма
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": -1
+}'
+
+//Негативный тест: депозит в размере 0 корнер кейс
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "balance": 0
+}'
+
+//Негативный тест: депозит в размере 88 сумма превышает остаток
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 88,
+  "balance": 5000.1
+}'
+
+//Предусловие: создание 2го счёта
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -d ''
+
+
+//Позитивный тест: перевод с одного счёта на другой в размере 9999 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 9999
+}'
+
+//Позитивный тест: перевод с одного счёта на другой в размере 10000 граница
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 10000
+}'
+
+//Негативный тест: перевод с одного счёта на другой в размере -1 отрицательная сумма
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": -1
+}'
+
+//Негативный тест: перевод с одного счёта на другой в размере 0 угловой случай
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 0
+}'
+
+//Негативный тест: перевод с одного счёта на другой в размере 10000.1 превышение максимальной суммы перевода
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 10000.1
+}'
+
+//Негативный тест: перевод с одного счёта на другой в размере 10001 превышение максимальной суммы перевода
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 10001
+}'
+
+//Негативный тест: перевод в размере 10 сумма превышает баланс
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 10
+}'
+
+//Негативный тест: для роли User запрос всех пользователей
+curl -X 'GET' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh'
+
+//Негативный тест: для роли User создание нового пользователя
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDEzOm15UGFzc3dvcmQ0NTYh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "milli2014",
+  "password": "myPassword456!",
+  "role": "USER"
+}'
+
+
+//Предусловие: создание нового пользователя с ролью User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic aGVsZW4xOTkxOm15UGFzc3dvcmQxMjMh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "milli2014",
+  "password": "myPassword789!",
+  "role": "USER"
+}'
+
+
+//Позитивный тест: для роли Admin проверка всех пользователей
+curl -X 'GET' \
+  'http://localhost:4111/api/v1/admin/users' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic aGVsZW4xOTkxOm15UGFzc3dvcmQxMjMh'
+
+//Негативный тест: для роли Admin попытка создать счет
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic aGVsZW4xOTkxOm15UGFzc3dvcmQxMjMh' \
+  -d ''
+
+//Негативный тест: для роли Admin попытка перевести деньги
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic aGVsZW4xOTkxOm15UGFzc3dvcmQxMjMh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 1,
+  "receiverAccountId": 2,
+  "amount": 10
+}'
+
+//Предусловие: создание дополнительного счета у User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -d ''
+
+//Предусловие: внесение депозита на доп счет у User
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/deposit' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 3,
+  "balance": 5000
+}'
+
+
+//Позитивный тест: перевод со счёта одного юзера на счет другого юзера на другой в размере 3000
+curl -X 'POST' \
+  'http://localhost:4111/api/v1/accounts/transfer' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "senderAccountId": 3,
+  "receiverAccountId": 1,
+  "amount": 3000
+}'
+
+//Позитивный тест: изменение имени у User 2 слова с пробелом
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena Kuznetsova"
+}'
+
+
+//Негативный тест: изменение имени у User 1 слово с пробелом
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena "
+}'
+
+//Негативный тест: изменение имени у User 1 слово без пробела
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena"
+}'
+
+//Негативный тест: изменение имени у User 2 слова с 2мя пробелами посередине
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena  Kuz"
+}'
+
+//Негативный тест: изменение имени у User 2 слова с 2мя пробелами посередине и 1м пробелом в конце
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena  Kuz "
+}'
+
+//Негативный тест: изменение имени у User 2 слова с 2мя пробелами и спецсимволами в словах
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Elena!  Kuz$"
+}'
+
+//Негативный тест: изменение имени у User 2 словами из цифр с пробелом посередине
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "123 456"
+}'
+
+//Негативный тест: изменение имени у User с пробелом
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": " "
+}'
+
+//Негативный тест угловой случай: изменение имени у User с пустым значением
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": ""
+}'
+
+//Негативный тест угловой случай: изменение имени у User со значением null
+curl -X 'PUT' \
+  'http://localhost:4111/api/v1/customer/profile' \
+  -H 'accept: */*' \
+  -H 'Authorization: Basic bWlsbGkyMDE0Om15UGFzc3dvcmQ3ODkh' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": null
+}'
