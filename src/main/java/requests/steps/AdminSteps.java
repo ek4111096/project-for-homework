@@ -2,11 +2,10 @@ package requests.steps;
 
 import generators.RandomModelGenerator;
 import io.restassured.specification.RequestSpecification;
-import models.CreateAccountResponse;
+import models.AccountResponse;
 import models.CreateUserRequest;
 import models.CreateUserResponse;
 import requests.skelethon.Endpoint;
-import requests.skelethon.requesters.CrudRequester;
 import requests.skelethon.requesters.ValidatedCrudRequester;
 import specs.RequestSpecs;
 import specs.ResponseSpecs;
@@ -25,7 +24,7 @@ public class AdminSteps {
         return userRequest;
     }
 
-    public static CreateAccountResponse createUserAndAccount() {
+    public static AccountResponse createUserAndAccount() {
         //Создаём пользователя
         CreateUserRequest userRequest = createUser();
 
@@ -36,7 +35,7 @@ public class AdminSteps {
         );
 
         //Создаём счёт от имени пользователя
-        return new ValidatedCrudRequester<CreateAccountResponse>(
+        return new ValidatedCrudRequester<AccountResponse>(
                 userSpec,
                 Endpoint.ACCOUNTS,
                 ResponseSpecs.entityWasCreated())

@@ -16,5 +16,5 @@ public class CustomerResponse extends BaseModel {
     private String password;
     private String name;
     private String role;
-    private List<CreateAccountResponse> accounts;
+    private List<AccountResponse> accounts;
 }

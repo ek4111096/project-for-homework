@@ -29,6 +29,11 @@ public class CreateUserTest extends BaseTest {
                 .post(createUserRequest);
 
         ModelAssertions.assertThatModels(createUserRequest,createUserResponse).match();
+        //Проверяем через GET, что пользователь действительно создан
+        new CrudRequester(RequestSpecs.authAsUser(createUserRequest.getUsername(), createUserRequest.getPassword()),
+                Endpoint.GET_PROFILE,
+                ResponseSpecs.usernameChanged(createUserResponse.getName()))
+                .get();
     }
 
     public static Stream<Arguments> userInvalidData() {

@@ -22,7 +22,7 @@ public enum Endpoint {
     ACCOUNTS(
             "/accounts",
             BaseModel.class,
-            CreateAccountResponse.class
+            AccountResponse.class
     ),
 
     DEPOSIT(
@@ -34,6 +34,21 @@ public enum Endpoint {
             "customer/accounts",
             BaseModel.class,
             CustomerResponse.class
+    ),
+    TRANSFER(
+            "accounts/transfer",
+            MakeTransferRequest.class,
+            MakeTransferResponse.class
+    ),
+    PUT_PROFILE(
+            "customer/profile",
+            ChangeUserNameRequest.class,
+            ChangeUserNameResponse.class
+    ),
+    GET_PROFILE(
+            "customer/profile",
+            BaseModel.class,
+            GetUserProfileResponce.class
     );
 
 

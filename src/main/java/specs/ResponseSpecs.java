@@ -2,8 +2,12 @@ package specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
+import models.AccountResponse;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
 
 public class ResponseSpecs {
     private ResponseSpecs() {}
@@ -47,15 +51,6 @@ public class ResponseSpecs {
                 .build();
     }
 
-//    public static ResponseSpecification depositTransactionExistsBorder4999(int accountId) {
-//        return defaultResponseBuilder()
-//                .expectBody(
-//                        "find { it.id == " + accountId + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == 4999 }",
-//                        Matchers.notNullValue()
-//                )
-//                .build();
-//    }
-
     public static ResponseSpecification requestReturnsError(int expectedStatus, String expectedMessage) {
         return defaultResponseBuilder()
                 .expectStatusCode(expectedStatus)
@@ -69,6 +64,19 @@ public class ResponseSpecs {
                         "find { it.id == " + accountId
                                 + " }.transactions.find { it.type == 'DEPOSIT' && it.amount == " + amount + " }",
                         Matchers.nullValue()
+                )
+                .build();
+    }
+
+    public static ResponseSpecification transferTransactionExists(long accountId, double amount) {
+        String expectedAmount = String.format(java.util.Locale.US, "%.2f", amount);
+
+        return defaultResponseBuilder()
+                .expectBody(
+                        "find { it.id == " + accountId +
+                                " }.transactions.find { it.type == 'TRANSFER_OUT' && " +
+                                "it.amount.toBigDecimal().compareTo(" + expectedAmount + "G) == 0 }",
+                        Matchers.notNullValue()
                 )
                 .build();
     }
@@ -92,7 +100,7 @@ public class ResponseSpecs {
     }
 
     public static ResponseSpecification transferTransactionDoesNotExist(
-            int accountId, double amount) {
+            long accountId, double amount) {
         return defaultResponseBuilder()
                 .expectBody(
                         "find { it.id == " + accountId
