@@ -1,0 +1,23 @@
+{
+  "chrome": {
+    "default": "91.0",
+    "versions": {
+      "91.0": {
+        "image": "dumbdumbych/selenium_vnc_chrome_arm64:91.0.b",
+        "port": "4444",
+        "path": "/",
+        "privileged": true
+      }
+    }
+  },
+  "firefox": {
+    "default": "125.0",
+    "versions": {
+      "125.0": {
+        "image": "selenoid/vnc_firefox:125.0",
+        "port": "4444",
+        "path": "/wd/hub"
+      }
+    }
+  }
+}
