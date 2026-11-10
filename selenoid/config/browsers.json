@@ -1,12 +1,15 @@
 {
   "chrome": {
-    "default": "91.0",
+    "default": "128.0",
     "versions": {
-      "91.0": {
-        "image": "dumbdumbych/selenium_vnc_chrome_arm64:91.0.b",
+      "128.0": {
+        "image": "selenoid/vnc:chrome_128.0",
+        "platform": "linux/amd64",
         "port": "4444",
         "path": "/",
-        "privileged": true
+        "tmpfs": {
+          "/tmp": "size=512m"
+        }
       }
     }
   },

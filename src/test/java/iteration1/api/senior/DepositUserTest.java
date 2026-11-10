@@ -1,6 +1,6 @@
-package iteration1.senior;
+package iteration1.api.senior;
 
-import iteration1.middle.BaseTest;
+import iteration1.api.middle.BaseTest;
 import models.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +30,7 @@ public class DepositUserTest extends BaseTest {
         owner = AdminSteps.createUser();
 
         //Создаём счёт
-        AccountResponse account = new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(owner.getUsername(), owner.getPassword()),
+        CreateAccountResponse account = new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(owner.getUsername(), owner.getPassword()),
                 Endpoint.ACCOUNTS,
                 ResponseSpecs.entityWasCreated())
                 .post(null);
@@ -46,8 +46,8 @@ public class DepositUserTest extends BaseTest {
         CreateUserRequest userRequest = AdminSteps.createUser();
 
         //Создаём счёт
-        AccountResponse account =
-                new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+        CreateAccountResponse account =
+                new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
                         .post(null);

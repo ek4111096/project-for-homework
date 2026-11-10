@@ -1,4 +1,4 @@
-package iteration1.middle;
+package iteration1.api.middle;
 
 import generators.RandomData;
 import models.ChangeUserNameRequest;

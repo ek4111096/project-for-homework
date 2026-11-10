@@ -1,4 +1,4 @@
-package iteration1.middle;
+package iteration1.api.middle;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;

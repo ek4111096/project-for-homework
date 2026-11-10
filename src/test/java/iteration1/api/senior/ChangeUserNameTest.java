@@ -1,10 +1,9 @@
-package iteration1.senior;
+package iteration1.api.senior;
 
 import generators.RandomData;
-import iteration1.middle.BaseTest;
+import iteration1.api.middle.BaseTest;
 import models.ChangeUserNameRequest;
 import models.CreateUserRequest;
-import models.CreateUserResponse;
 import models.GetUserProfileResponce;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

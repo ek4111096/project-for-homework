@@ -16,7 +16,14 @@ public class RandomData {
     }
 
     public static String getName() {
-        return RandomStringUtils.randomAlphabetic(5) + " " +
-                RandomStringUtils.randomAlphabetic(8);
+        String firstName = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+        String lastName = RandomStringUtils.randomAlphabetic(8).toLowerCase();
+
+        return capitalize(firstName) + " " + capitalize(lastName);
+    }
+
+    private static String capitalize(String value) {
+        return value.substring(0, 1).toUpperCase() +
+                value.substring(1);
     }
 }

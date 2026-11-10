@@ -1,7 +1,7 @@
-package iteration1.senior;
+package iteration1.api.senior;
 
-import iteration1.middle.BaseTest;
-import models.AccountResponse;
+import iteration1.api.middle.BaseTest;
+import models.CreateAccountResponse;
 import models.CreateUserRequest;
 import models.MakeDepositRequest;
 import models.MakeTransferRequest;
@@ -30,15 +30,15 @@ public class TransferUserTest extends BaseTest {
         CreateUserRequest userRequest = AdminSteps.createUser();
 
         //Создаём счёт
-        AccountResponse account =
-                new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+        CreateAccountResponse account =
+                new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
                         .post(null);
 
         //Создаём второй счёт
-        AccountResponse secondAccount =
-                new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+        CreateAccountResponse secondAccount =
+                new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
                         .post(null);
@@ -83,8 +83,8 @@ public class TransferUserTest extends BaseTest {
         CreateUserRequest firstUserRequest = AdminSteps.createUser();
 
         //Создаём счёт первого пользователя
-        AccountResponse firstUserAccount =
-                new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(firstUserRequest.getUsername(), firstUserRequest.getPassword()),
+        CreateAccountResponse firstUserAccount =
+                new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(firstUserRequest.getUsername(), firstUserRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
                         .post(null);
@@ -93,8 +93,8 @@ public class TransferUserTest extends BaseTest {
         CreateUserRequest secondUserRequest = AdminSteps.createUser();
 
         //Создаём счёт второго пользователя
-        AccountResponse secondUserAccount =
-                new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(secondUserRequest.getUsername(), secondUserRequest.getPassword()),
+        CreateAccountResponse secondUserAccount =
+                new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(secondUserRequest.getUsername(), secondUserRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
                         .post(null);
@@ -134,8 +134,8 @@ public class TransferUserTest extends BaseTest {
 
     //Негативные проверки
     private static CreateUserRequest userRequest;
-    private static AccountResponse firstAccount;
-    private static AccountResponse secondAccount;
+    private static CreateAccountResponse firstAccount;
+    private static CreateAccountResponse secondAccount;
 
     @BeforeAll
     static void setUp() {
@@ -143,13 +143,13 @@ public class TransferUserTest extends BaseTest {
         userRequest = AdminSteps.createUser();
 
         //Создаём первый счёт
-        firstAccount = new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+        firstAccount = new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 Endpoint.ACCOUNTS,
                 ResponseSpecs.entityWasCreated())
                 .post(null);
 
         //Создаём второй счёт
-        secondAccount = new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+        secondAccount = new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 Endpoint.ACCOUNTS,
                 ResponseSpecs.entityWasCreated())
                 .post(null);

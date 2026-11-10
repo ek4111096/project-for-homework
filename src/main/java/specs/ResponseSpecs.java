@@ -2,12 +2,8 @@ package specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
-import models.AccountResponse;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
 
 public class ResponseSpecs {
     private ResponseSpecs() {}

@@ -22,7 +22,7 @@ public enum Endpoint {
     ACCOUNTS(
             "/accounts",
             BaseModel.class,
-            AccountResponse.class
+            CreateAccountResponse.class
     ),
 
     DEPOSIT(

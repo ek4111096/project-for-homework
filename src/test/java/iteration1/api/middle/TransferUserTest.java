@@ -1,12 +1,10 @@
-package iteration1.middle;
+package iteration1.api.middle;
 
 import generators.RandomData;
-import io.restassured.http.ContentType;
 import models.CreateUserRequest;
 import models.MakeDepositRequest;
 import models.MakeTransferRequest;
 import models.UserRole;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
