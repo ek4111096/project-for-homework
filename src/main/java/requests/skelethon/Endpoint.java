@@ -49,6 +49,11 @@ public enum Endpoint {
             "customer/profile",
             BaseModel.class,
             GetUserProfileResponce.class
+    ),
+    GET_USERS(
+            "/admin/users",
+            BaseModel.class,
+            BaseModel.class
     );
 
 

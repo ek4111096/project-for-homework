@@ -29,6 +29,7 @@ public class CreateUserTest extends BaseTest {
                 .post(createUserRequest);
 
         ModelAssertions.assertThatModels(createUserRequest,createUserResponse).match();
+
         //Проверяем через GET, что пользователь действительно создан
         new CrudRequester(RequestSpecs.authAsUser(createUserRequest.getUsername(), createUserRequest.getPassword()),
                 Endpoint.GET_PROFILE,
@@ -60,5 +61,11 @@ public class CreateUserTest extends BaseTest {
                 Endpoint.ADMIN_USER,
                 ResponseSpecs.requestReturnsBadRequest(errorKey, errorValue))
                 .post(createUserRequest);
+
+        // Проверяем, что пользователь не появился
+        new CrudRequester(RequestSpecs.adminSpec(),
+                Endpoint.GET_USERS,
+                ResponseSpecs.userWasNotCreated(username))
+                .get();
     }
 }

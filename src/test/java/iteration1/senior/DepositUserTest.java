@@ -33,7 +33,7 @@ public class DepositUserTest extends BaseTest {
         AccountResponse account = new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(owner.getUsername(), owner.getPassword()),
                 Endpoint.ACCOUNTS,
                 ResponseSpecs.entityWasCreated())
-                .post(null);
+                .post();
 
         accountId = account.getId();
     }
@@ -50,7 +50,7 @@ public class DepositUserTest extends BaseTest {
                 new ValidatedCrudRequester<AccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                         Endpoint.ACCOUNTS,
                         ResponseSpecs.entityWasCreated())
-                        .post(null);
+                        .post();
 
         //Создаём запрос на депозит
         MakeDepositRequest depositRequest = MakeDepositRequest.builder()

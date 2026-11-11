@@ -3,6 +3,7 @@ package iteration1.senior;
 import models.CreateUserRequest;
 import models.CreateUserResponse;
 import models.LoginUserRequest;
+import models.TestData;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import requests.skelethon.Endpoint;
@@ -17,8 +18,8 @@ public class LoginUserTest extends BaseTest {
     @Test
     public void adminCanGenerateAuthTokenTest() {
         LoginUserRequest userRequest = LoginUserRequest.builder()
-                .username("admin")
-                .password("admin")
+                .username(TestData.ADMIN_USERNAME)
+                .password(TestData.ADMIN_PASSWORD)
                 .build();
 
         new ValidatedCrudRequester<CreateUserResponse>(RequestSpecs.unauthSpec(),

@@ -131,4 +131,11 @@ public class ResponseSpecs {
                 .expectBody("name", Matchers.equalTo(expectedName))
                 .build();
     }
+
+    public static ResponseSpecification userWasNotCreated(String username) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_OK)
+                .expectBody("username", Matchers.not(Matchers.hasItem(username)))
+                .build();
+    }
 }

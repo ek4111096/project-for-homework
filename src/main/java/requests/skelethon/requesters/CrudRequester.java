@@ -28,7 +28,7 @@ public class CrudRequester extends HttpRequest implements CrudEndpointInterface 
     }
 
     public ValidatableResponse post() {
-        return null;
+        return post(null);
     }
 
     @Override
@@ -66,4 +66,6 @@ public class CrudRequester extends HttpRequest implements CrudEndpointInterface 
     public Object delete(long id) {
         return null;
     }
+
+
 }
