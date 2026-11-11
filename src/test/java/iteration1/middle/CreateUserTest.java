@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import requests.AdminCreateUserRequester;
+import requests.GetAllUsersRequester;
 import requests.GetCustomerProfileRequester;
 import specs.RequestSpecs;
 import specs.ResponseSpecs;
@@ -59,7 +60,11 @@ public class CreateUserTest extends BaseTest {
                 .build();
 
         new AdminCreateUserRequester(RequestSpecs.adminSpec(),
-                ResponseSpecs.requestReturnsBadRequest(errorKey, errorValue))
+                ResponseSpecs.requestReturnsBadRequestHasItem(errorKey, errorValue))
                 .post(createUserRequest);
+        // Проверяем через GET, что пользователь не создан
+        new GetAllUsersRequester(RequestSpecs.adminSpec(),
+                ResponseSpecs.userWasNotCreated(username))
+                .get();
     }
 }

@@ -42,6 +42,13 @@ public class ResponseSpecs {
                 .build();
     }
 
+    public static ResponseSpecification requestReturnsBadRequestHasItem(String errorKey, String errorValue) {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectBody(errorKey, Matchers.hasItem(errorValue))
+                .build();
+    }
+
     public static ResponseSpecification depositTransactionExists(
             long accountId, double amount) {
 
@@ -123,6 +130,13 @@ public class ResponseSpecs {
     public static ResponseSpecification accountExists(long accountId) {
         return new ResponseSpecBuilder()
                 .expectBody("id", hasItem((int) accountId))
+                .build();
+    }
+
+    public static ResponseSpecification userWasNotCreated(String username) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_OK)
+                .expectBody("username", Matchers.not(Matchers.hasItem(username)))
                 .build();
     }
 }
