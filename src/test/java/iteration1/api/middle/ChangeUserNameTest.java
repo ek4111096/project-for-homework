@@ -1,17 +1,19 @@
 package iteration1.api.middle;
 
-import generators.RandomData;
-import models.ChangeUserNameRequest;
-import models.CreateUserRequest;
-import models.UserRole;
+import api.generators.RandomData;
+import api.models.ChangeUserNameRequest;
+import api.models.CreateUserRequest;
+import api.models.UserRole;
+import api.requests.AdminCreateUserRequester;
+import api.requests.ChangeUserNameRequester;
+import api.requests.GetCustomerProfileRequester;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import requests.*;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import java.util.stream.Stream;
 

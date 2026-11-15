@@ -1,26 +1,26 @@
 package iteration1.api.senior;
 
 import iteration1.api.middle.BaseTest;
-import models.CreateAccountResponse;
-import models.CreateUserRequest;
-import models.MakeDepositRequest;
-import models.MakeTransferRequest;
+import api.models.CreateAccountResponse;
+import api.models.CreateUserRequest;
+import api.models.MakeDepositRequest;
+import api.models.MakeTransferRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import requests.skelethon.Endpoint;
-import requests.skelethon.requesters.CrudRequester;
-import requests.skelethon.requesters.ValidatedCrudRequester;
-import requests.steps.AdminSteps;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.requests.skelethon.Endpoint;
+import api.requests.skelethon.requesters.CrudRequester;
+import api.requests.skelethon.requesters.ValidatedCrudRequester;
+import api.requests.steps.AdminSteps;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import java.util.stream.Stream;
 
-import static generators.TestUtils.repeat;
+import static api.generators.TestUtils.repeat;
 
 public class TransferUserTest extends BaseTest {
     @ParameterizedTest

@@ -1,21 +1,21 @@
 package iteration1.api.senior;
 
-import generators.RandomData;
+import api.generators.RandomData;
 import iteration1.api.middle.BaseTest;
-import models.ChangeUserNameRequest;
-import models.CreateUserRequest;
-import models.GetUserProfileResponce;
+import api.models.ChangeUserNameRequest;
+import api.models.CreateUserRequest;
+import api.models.GetUserProfileResponce;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import requests.skelethon.Endpoint;
-import requests.skelethon.requesters.CrudRequester;
-import requests.skelethon.requesters.ValidatedCrudRequester;
-import requests.steps.AdminSteps;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.requests.skelethon.Endpoint;
+import api.requests.skelethon.requesters.CrudRequester;
+import api.requests.skelethon.requesters.ValidatedCrudRequester;
+import api.requests.steps.AdminSteps;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import java.util.stream.Stream;
 

@@ -1,16 +1,16 @@
 package iteration1.api.middle;
 
-import generators.RandomData;
-import models.CreateUserRequest;
-import models.CreateUserResponse;
-import models.UserRole;
+import api.generators.RandomData;
+import api.models.CreateUserRequest;
+import api.models.CreateUserResponse;
+import api.models.UserRole;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import requests.AdminCreateUserRequester;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.requests.AdminCreateUserRequester;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import java.util.stream.Stream;
 
