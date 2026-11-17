@@ -1,11 +1,18 @@
 package ui.pages;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
+import ui.elements.UserBage;
 
+import java.util.List;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 @Getter
 public class AdminPanel extends BasePage<AdminPanel> {
@@ -24,7 +31,16 @@ public class AdminPanel extends BasePage<AdminPanel> {
         return this;
     }
 
-    public ElementsCollection getAllUsers() {
-        return $(Selectors.byText("All Users")).parent().findAll("li");
+    public List<UserBage> getAllUsers() {
+        ElementsCollection elementsCollection =  $(Selectors.byText("All Users")).parent().findAll("li");
+        return generatePageElements(elementsCollection, UserBage::new);
+    }
+
+    public AdminPanel shouldHaveUser(String username) {
+        $("ul.card.shadow-custom")
+                .$$("li")
+                .findBy(text(username))
+                .shouldBe(visible);
+        return this;
     }
 }

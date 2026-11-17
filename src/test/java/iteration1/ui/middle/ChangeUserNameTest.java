@@ -13,6 +13,8 @@ import ui.pages.UserDashboard;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ChangeUserNameTest extends BaseUiTest {
 

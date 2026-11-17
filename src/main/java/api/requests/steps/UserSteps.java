@@ -2,10 +2,15 @@ package api.requests.steps;
 
 //import api.models.AccountResponse;
 import api.models.CreateAccountResponse;
+import api.models.CreateUserRequest;
+import api.models.MakeDepositRequest;
+import api.models.MakeDepositResponse;
 import api.requests.skelethon.Endpoint;
+import api.requests.skelethon.requesters.CrudRequester;
 import api.requests.skelethon.requesters.ValidatedCrudRequester;
 import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
+import common.storage.SessionStorage;
 
 import java.util.List;
 
@@ -23,5 +28,25 @@ public class UserSteps {
                 RequestSpecs.authAsUser(username, password),
                 Endpoint.GET_ACCOUNTS,
                 ResponseSpecs.requestReturnsOK()).getAll(CreateAccountResponse[].class);
+    }
+
+    public static CreateAccountResponse createAccountForUser(CreateUserRequest user) {
+        return new ValidatedCrudRequester<CreateAccountResponse>(
+                RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
+                Endpoint.ACCOUNTS,
+                ResponseSpecs.entityWasCreated())
+                .post();
+    }
+
+    public static void makeDeposit(CreateUserRequest userRequest, long accountId, double amount) {
+        MakeDepositRequest depositRequest = MakeDepositRequest.builder()
+                .id(accountId)
+                .balance(amount)
+                .build();
+
+        new CrudRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.DEPOSIT,
+                ResponseSpecs.requestReturnsOK())
+                .post(depositRequest);
     }
 }

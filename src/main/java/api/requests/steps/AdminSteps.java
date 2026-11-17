@@ -26,23 +26,6 @@ public class AdminSteps {
         return userRequest;
     }
 
-    public static CreateAccountResponse createUserAndAccount() {
-        //Создаём пользователя
-        CreateUserRequest userRequest = createUser();
-
-        //Авторизуемся под созданным пользователем
-        RequestSpecification userSpec = RequestSpecs.authAsUser(
-                userRequest.getUsername(),
-                userRequest.getPassword()
-        );
-
-        //Создаём счёт от имени пользователя
-        return new ValidatedCrudRequester<CreateAccountResponse>(
-                userSpec,
-                Endpoint.ACCOUNTS,
-                ResponseSpecs.entityWasCreated())
-                .post(null);
-    }
 
     public static List<CreateUserResponse> getAllUsers() {
         return new ValidatedCrudRequester<CreateUserResponse>(
