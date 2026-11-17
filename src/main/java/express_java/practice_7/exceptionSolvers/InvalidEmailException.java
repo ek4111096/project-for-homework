@@ -1,0 +1,7 @@
+package express_java.practice_7.exceptionSolvers;
+
+public class InvalidEmailException extends RuntimeException {
+    public InvalidEmailException(String message) {
+        super(message);
+    }
+}
